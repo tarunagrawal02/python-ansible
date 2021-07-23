@@ -2,6 +2,7 @@
 This repo has the assignments for python and ansible.
 
 Pre-requisites - 
+
 a. Install pip using below commands:
 1. sudo apt update
 2. sudo apt install python3-pip
