@@ -10,8 +10,10 @@ a. Install pip using below commands:
 
 b. Install psutil
 1. pip3 install psutil
+
 c. pip install Flask
 1. As the command to install pip is already given above. Have pip installed in your Python environment, and follow  above step.
+
 d. Install pandas
 1. pip install pandas
 
