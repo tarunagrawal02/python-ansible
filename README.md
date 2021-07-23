@@ -1,5 +1,6 @@
 # python-ansible
 This repo has the assignments for python and ansible.
+
 Pre-requisites - 
 a. Install pip using below commands:
 1. sudo apt update
