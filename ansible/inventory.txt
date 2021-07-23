@@ -1,0 +1,4 @@
+[hostnames]
+host1 ansible_host=httpd.server.com ansible_ssh_pass=xxxxxxxxxxx
+host2 ansible_host=rabbitmq.server.com ansible_ssh_pass=xxxxxxxxxxx
+host3 ansible_host=postgresql.server.com ansible_ssh_pass=xxxxxxxxxxx
