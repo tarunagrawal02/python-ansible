@@ -33,16 +33,15 @@ for proc in psutil.process_iter():
                            "host_name": host_name
                           }
             serviceList.append(serviceDict)
+            #Creating the JSON file name format as required
+            fileName = service + "-status-" + str(int(timestamp)) + ".json"
+            with open(fileName, "w") as outfile:
+                json.dump(serviceDict, outfile)
     # We could also get psutil.ZombieProcess or
     # psutil.AccessDenied.
 
     except psutil.NoSuchProcess:
         pass
-
-#Creating the JSON file name format as required
-    fileName = service + "-status-" + str(int(timestamp)) + ".json"
-    with open(fileName, "w") as outfile:
-        json.dump(serviceDict, outfile)
 
 app = Flask(__name__)
 @app.route('/add',methods=['GET'])
@@ -54,7 +53,7 @@ def addJson():
 
 @app.route('/healthcheck',methods=['GET'])
 def getAllHealthCheck():
-   if detected_pids.len() == services.len():
+   if len(detected_pids) == len(services):
       rbcapp1 = "UP"
    return "The rbcapp1 application is" + rbcapp1
 
