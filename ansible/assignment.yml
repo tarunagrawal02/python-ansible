@@ -1,0 +1,62 @@
+- 
+  name: httpdInstallPlay
+  hosts: host1
+  vars:
+    action: verify_install
+  remote_user: root
+  tasks:
+  - name: check and install the latest httpd version
+    yum: name=httpd state=latest
+    
+-
+  name: checkDiskPlay
+  hosts: hostnames
+  vars:
+    action: check-disk
+  remote_user: root
+  tasks:
+  - name: Ensuring that free space on '/' is grater than 20%
+    assert:
+  that:
+        - not {{ item.mount == '/' and ( item.size_available < item.size_total - ( item.size_total|float * 0.2 ) ) }}
+    with_items: '{{ ansible_mounts }}'
+    ignore_errors: yes
+    register: disk_free
+  -  debug: var=disk_free
+
+  - name: Email alert about the disk usage
+    community.general.mail:
+        host: localhost
+        port: "8080"
+        username: "my_username"
+        password: "my_password"
+        to: John Smith <john.smith@example.com>
+        subject: 'Disk Space alert'
+        body: '{{ inventory_hostname }} is running low on disk space. Currently {{ disk_free.results[0]['item']['size_available'] }}MB available.'
+    delegate_to: localhost
+    
+-
+  name: checkStatusPlay
+  hosts: myservice.example.com
+  vars:
+    action: check-status
+  tasks:
+    - name: check the status of rbcapp1
+      uri:
+        url: "http://{{ ansible_host }}/healthcheck"
+        status_code: 200
+        
+    -name: check status of httpd service
+      uri:
+        url: "http://{{ ansible_host }}/healthcheck/httpd"
+        register: service_status_httpd
+        
+    -name: check status of rabbitMQ service
+      uri:
+        url: "http://{{ ansible_host }}/healthcheck/rabbitmq"
+        register: service_status_rabbitmq
+        
+    -name: check status of postgreSQL service
+      uri:
+        url: "http://{{ ansible_host }}/healthcheck/postgresql"
+        register: service_status_postgresql
