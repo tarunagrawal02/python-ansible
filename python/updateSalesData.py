@@ -5,8 +5,6 @@ import csv
 
 infile = pd.read_csv("assignment data.csv")
 
-# Remove data where sq_ft is 0, as it will result in error (infinity) as sq_ft is in denominator
-infile['sq__ft'] = infile[infile['sq__ft'] != 0]
 a = infile['price']/infile['sq__ft']
 #print (a)
 
@@ -21,7 +19,7 @@ per_srq_ft = (avg_price)/(avg_sq_ft)
 
 #print(per_srq_ft)
 
-with open("assignment data.csv", "r") as f,open("modified10.csv", "w") as f_out:
+with open("assignment data.csv", "r") as f,open("updatedSalesData.csv", "w") as f_out:
           reader = csv.reader(f)
           writer = csv.writer(f_out)
           for row in reader:
