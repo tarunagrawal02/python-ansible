@@ -5,6 +5,8 @@ import csv
 
 infile = pd.read_csv("assignment data.csv")
 
+# Remove data where sq_ft is 0, as it will result in error (infinity) as sq_ft is in denominator
+infile['sq__ft'] = infile[infile['sq__ft'] != 0]
 a = infile['price']/infile['sq__ft']
 #print (a)
 
