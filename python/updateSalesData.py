@@ -5,10 +5,6 @@ import csv
 
 infile = pd.read_csv("assignment data.csv")
 
-a = infile['price']/infile['sq__ft']
-#print (a)
-
-
 avg_sq_ft= infile['sq__ft'].mean()
 
 #print (avg)
