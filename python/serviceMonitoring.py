@@ -1,6 +1,5 @@
 import psutil
 import socket
-import json
 import requests
 from datetime import datetime
 from flask import Flask
@@ -14,7 +13,7 @@ timestamp = dt_obj.timestamp() * 1000
 #Check that the service is running
 
 host_name = socket.gethostname()
-services = ["RABBITMQ","HTTPD","POSTGRESQL"]
+services = ["RABBITMQ","HTTPD","POSTGRESQL","CHROME"]
 detected_pids = set()
 rbcapp1 = "DOWN"
 service_status = "DOWN"
@@ -25,6 +24,7 @@ for proc in psutil.process_iter():
   for service in services:
     try:
         if service in proc.name().upper():
+           # print(proc.name())
             detected_pids.add(str(proc.name))
             service_status = "UP"
             serviceDict = {
@@ -43,6 +43,8 @@ for proc in psutil.process_iter():
     except psutil.NoSuchProcess:
         pass
 
+print(serviceList)
+
 app = Flask(__name__)
 @app.route('/add',methods=['GET'])
 def addJson():
@@ -51,17 +53,22 @@ def addJson():
       raise ApiError('POST /add/ {}'.format(resp.status_code))
    return resp.status_code
 
-@app.route('/healthcheck',methods=['GET'])
+@app.route('/healthcheck', methods=['GET'])
 def getAllHealthCheck():
    if len(detected_pids) == len(services):
       rbcapp1 = "UP"
-   return "The rbcapp1 application is" + rbcapp1
+      print(rbcapp1)
+      return "The rbcapp1 application is UP"
+   else:
+      return "The rbcapp1 application is DOWN"
 
 @app.route('/healthcheck/<serviceName>',methods=['GET'])
 def getServiceHealthCheck(serviceName):
    for ser in serviceList:
-      if ser['service_name'] == serviceName:
+      if serviceName.upper() in str(ser):
          return ser['service_status']
+      else:
+         return "DOWN"
 
 if __name__ == '__main__':
    app.run()
